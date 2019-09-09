@@ -1,6 +1,13 @@
 import java.io.*;
 import java.util.Scanner;
 
+//----added in equation class that contains all 3 parts of an equation
+
+
+
+
+
+
 public class FileReader
 {
 	
@@ -8,19 +15,29 @@ public class FileReader
 		{
 			//-----file location 
 			//String f = "/Users/C.J. Hammock/git/Project1/testing e+git/src/Equations.dat";//file location
-			//System.out.println(GetFile(f));
+			//System.out.println(GetEquation(f, 1));
 		}
 		
-		static String GetFile( String inputFile)
+		//gets the equation at the file location given and what number it is in the order
+		static Equation GetEquation( String inputFile, int EquNum)
 		{
 			String s = "";//initialize empty string
 			try 
 			{
 				Scanner Scnr = new Scanner(new File(inputFile));
-				//read.useDelimeter(";"); //uses a semicolon delemeter for Scnr.next();
-				while(Scnr.hasNext())
+				Scnr.useDelimiter(";"); //uses a semicolon delemeter for Scnr.next();
+				//-----ineffecient way to get a function at a set location
+				for(int i = 0; i <= EquNum; i++)
 				{
-					s = Scnr.next();//will be able to get the next string before delimeter
+					if(Scnr.hasNext())
+					{
+						s = Scnr.next();//will be able to get the next string before delimeter
+					}
+					else
+					{
+						//should probably throw an error
+						break;
+					}
 				}
 				Scnr.close();
 			}
@@ -28,55 +45,12 @@ public class FileReader
 			{
 				System.out.println(e.getMessage());
 			}
-			return s;
-			
-		}
+			//--------should have a way of checking that not an empty string
+			Equation E = new Equation(s);
+			return E;
 
-		static String GetFnum(String eq)
-		{
-			String fnumber = String.valueOf(eq.charAt(0));//this ensures that if the first number has a -ve sign it is included and not tricking the symbol checker
-			
-			for(int i=1; i < eq.length()-1; i++ )
-			{
-				if(eq.charAt(i)==('+')||eq.charAt(i)==('-')||eq.charAt(i)==('*')||eq.charAt(i)==('/'))//--------can shorten by making the "or"s refrence one call of "charAt"
-					break;//stop looping if symbol found
-				else
-					fnumber += eq.charAt(i);//adds digits of first number as equation parsed through
-			}
-		return fnumber;
 		}
 		
-		//assumes string given is an equation like (#symbol#) with no spaces, can include negatives
-		static String GetSymbol(String eq)
-		{			
-			String symb = "";//initialize empty string
-			
-			for(int i=1; i < eq.length()-1; i++ )//start at 1 to avoid possible -ve sign of first number 
-			{
-				//finds the symbol of the input formula
-				if(eq.charAt(i)==('+')||eq.charAt(i)==('-')||eq.charAt(i)==('*')||eq.charAt(i)==('/'))//--------can shorten by making the "or"s refrence one call of "charAt"
-				{
-					symb = String.valueOf(eq.charAt(i));	
-					break;//once symbol is found, stop looping
-				}
-			}
-		return symb;
-		}
-		
-		static String GetLnum(String eq)
-		{			
-			String lnumber = "";//initialize empty string
-			boolean start=false;
-			
-			for(int i=1; i < eq.length(); i++ )//start at 1 to avoid possible -ve sign of first number 
-			{
-				if(start)
-					lnumber += String.valueOf(eq.charAt(i));
-				//finds the symbol of the input formula
-				if(eq.charAt(i)==('+')||eq.charAt(i)==('-')||eq.charAt(i)==('*')||eq.charAt(i)==('/'))//--------can shorten by making the "or"s refrence one call of "charAt"		
-					start=true;//once symbol is found, start parsing for the last number
-			}
-		return lnumber;
-		}
+		//------------removed getFile method. getting parts of equation moved to new equation class
 		
 }
